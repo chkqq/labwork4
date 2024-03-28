@@ -25,5 +25,9 @@ double CCone::GetMass() const
 
 string CCone::ToString() const
 {
-    return "Cone";
+    string ConeInfo = "Cone\n";
+    ConeInfo += "Density: " + to_string(GetDensity()) + "\n";
+    ConeInfo += "Mass: " + to_string(GetMass()) + "\n";
+    ConeInfo += "Volume: " + to_string(GetVolume()) + "\n";
+    return ConeInfo;
 }

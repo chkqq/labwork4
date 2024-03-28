@@ -26,5 +26,9 @@ double CCylinder::GetMass() const
 
 string CCylinder::ToString() const
 {
-    return "Cylinder";
+    string CylinderInfo = "Cylinder\n";
+    CylinderInfo += "Density: " + to_string(GetDensity()) + "\n";
+    CylinderInfo += "Mass: " + to_string(GetMass()) + "\n";
+    CylinderInfo += "Volume: " + to_string(GetVolume()) + "\n";
+    return CylinderInfo;
 }

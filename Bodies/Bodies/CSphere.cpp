@@ -25,5 +25,10 @@ double CSphere::GetMass() const
 
 std::string CSphere::ToString() const 
 {
-    return "Sphere";
+    string SphereInfo = "Sphere\n";
+    SphereInfo += "Density: " + to_string(GetDensity()) + "\n";
+    SphereInfo += "Mass: " + to_string(GetMass()) + "\n";
+    SphereInfo += "Volume: " + to_string(GetVolume()) + "\n";
+
+    return SphereInfo;
 }

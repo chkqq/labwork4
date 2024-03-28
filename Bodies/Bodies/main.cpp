@@ -64,7 +64,6 @@ void FindMaxBodyMass(vector<BodyPtr>& bodies)
     if (maxMassBody)
     {
         cout << "Body with maximum mass:\n" << maxMassBody->ToString() << endl;
-        cout << "Mass: " << maxMassBody->GetMass() << endl;
     }
     else
     {
@@ -77,10 +76,7 @@ void FindMinWeightInWater(vector<BodyPtr>& bodies)
     auto minWeightInWaterBody = MinWeightInWater(bodies);
     if (minWeightInWaterBody) 
     {
-        cout << "Body with minimum weight in water:\n" << minWeightInWaterBody->ToString() 
-             << " with mass " << minWeightInWaterBody->GetMass() << endl;
-        double weightDiff = minWeightInWaterBody->GetMass() - (1000 * minWeightInWaterBody->GetVolume());
-        cout << "Weight difference: " << weightDiff << endl;
+        cout << "Body with minimum weight in water:\n" << minWeightInWaterBody->ToString();
     }
     else {
         cout << "No bodies found!" << endl;
@@ -256,16 +252,12 @@ int main()
         case 7:
         {
             FindMinWeightInWater(bodies);
-           
         }
         break;
         case 8:
             cout << "All Bodies:\n";
             for (const auto& body : bodies) {
-                cout << body->ToString() <<endl;
-                cout << "Density: " << body->GetDensity() << endl;
-                cout << "Volume: " << body->GetVolume() << endl;
-                cout << "Mass: " << body->GetMass() << endl;
+                cout << body->ToString() << endl;
                 cout << endl;
             }
         break;

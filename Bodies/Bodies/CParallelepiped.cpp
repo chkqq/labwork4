@@ -23,5 +23,10 @@ double CParallelepiped::GetMass() const
 
 string CParallelepiped::ToString() const 
 {
-    return "Parallelepiped";
+    string ParallelepipedInfo = "Parallelepiped\n";
+    ParallelepipedInfo += "Density: " + to_string(GetDensity()) + "\n";
+    ParallelepipedInfo += "Mass: " + to_string(GetMass()) + "\n";
+    ParallelepipedInfo += "Volume: " + to_string(GetVolume()) + "\n";
+
+    return ParallelepipedInfo;
 }

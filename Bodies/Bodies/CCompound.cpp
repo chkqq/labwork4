@@ -29,34 +29,19 @@ double CCompound::GetMass() const
     return totalMass;
 }
 
-std::string GenerateIndentedString(const std::string& str, int indentation)
+string CCompound::ToString() const
 {
-    std::string indent(indentation, ' ');
-    std::stringstream ss;
-    ss << indent << str << "\n";
-    return ss.str();
-}
-
-std::string CCompound::ToString() const
-{
-    return ToStringRecursive(0);
-}
-
-std::string CCompound::ToStringRecursive(int indentation) const
-{
-    std::string compoundInfo;
-    std::string indent(indentation, ' ');
-
-    compoundInfo += GenerateIndentedString("Compound Body:", indentation);
-
+    string compoundInfo = "Compound Body:\n";
     for (const auto& body : m_bodies)
     {
-        compoundInfo += body->ToString();
-        if (auto compound = dynamic_pointer_cast<CCompound>(body))
-        {
-            compoundInfo += compound->ToStringRecursive(indentation + 5);
-        }
+        compoundInfo += body->ToString() + "\n";
     }
+
+    compoundInfo += "\n";
+    compoundInfo += "Density: " + to_string(GetDensity()) + "\n";
+    compoundInfo += "Mass: " + to_string(GetMass()) + "\n";
+    compoundInfo += "Volume: " + to_string(GetVolume()) + "\n";
+
     return compoundInfo;
 }
 
