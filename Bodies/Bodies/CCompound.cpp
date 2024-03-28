@@ -1,49 +1,69 @@
+// CCompound.cpp
 #include "CCompound.h"
-double CCompound::GetDensity() const 
+#include <sstream>
+
+double CCompound::GetDensity() const
 {
-    double totalMass = 0.0;
-    double totalVolume = 0.0;
-    for (const auto& body : m_bodies) 
-    {
-        totalMass += body->GetMass();
-        totalVolume += body->GetVolume();
-    }
-    return totalMass / totalVolume;
+    double totalMass = GetMass();
+    double totalVolume = GetVolume();
+    return totalVolume != 0 ? totalMass / totalVolume : 0.0;
 }
 
-double CCompound::GetVolume() const 
+double CCompound::GetVolume() const
 {
     double totalVolume = 0.0;
-    for (const auto& body : m_bodies) 
+    for (const auto& body : m_bodies)
     {
         totalVolume += body->GetVolume();
     }
     return totalVolume;
 }
 
-double CCompound::GetMass() const 
+double CCompound::GetMass() const
 {
     double totalMass = 0.0;
-    for (const auto& body : m_bodies) 
+    for (const auto& body : m_bodies)
     {
         totalMass += body->GetMass();
     }
     return totalMass;
 }
 
-std::string CCompound::ToString() const 
+std::string GenerateIndentedString(const std::string& str, int indentation)
 {
-    std::string compoundInfo = "Compound Body:\n";
+    std::string indent(indentation, ' ');
+    std::stringstream ss;
+    ss << indent << str << "\n";
+    return ss.str();
+}
+
+std::string CCompound::ToString() const
+{
+    return ToStringRecursive(0);
+}
+
+std::string CCompound::ToStringRecursive(int indentation) const
+{
+    std::string compoundInfo;
+    std::string indent(indentation, ' ');
+
+    compoundInfo += GenerateIndentedString("Compound Body:", indentation);
+
     for (const auto& body : m_bodies)
     {
-        compoundInfo += body->ToString() + "\n";
+        compoundInfo += body->ToString();
+        if (auto compound = dynamic_pointer_cast<CCompound>(body))
+        {
+            compoundInfo += compound->ToStringRecursive(indentation + 5);
+        }
     }
     return compoundInfo;
 }
 
-bool CCompound::AddChildBody(const BodyPtr& body) 
+
+bool CCompound::AddChildBody(const BodyPtr& body)
 {
-    if (Contains(body)) 
+    if (Contains(body))
     {
         return false;
     }
@@ -51,17 +71,17 @@ bool CCompound::AddChildBody(const BodyPtr& body)
     return true;
 }
 
-bool CCompound::Contains(const BodyPtr& body) const 
+bool CCompound::Contains(const BodyPtr& body) const
 {
-    for (const auto& b : m_bodies) 
+    for (const auto& b : m_bodies)
     {
-        if (b.get() == body.get()) 
+        if (b.get() == body.get())
         {
             return true;
         }
-        if (auto compound = std::dynamic_pointer_cast<CCompound>(b)) 
+        if (auto compound = std::dynamic_pointer_cast<CCompound>(b))
         {
-            if (compound->Contains(body)) 
+            if (compound->Contains(body))
             {
                 return true;
             }

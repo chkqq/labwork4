@@ -87,26 +87,30 @@ void FindMinWeightInWater(vector<BodyPtr>& bodies)
     }
 }
 
-void addCompoundBody(vector<BodyPtr>& bodies) 
+shared_ptr<CCompound> AddCompoundBodyRecursive(int indentation = 0)
 {
     auto compound = make_shared<CCompound>();
+
     int numComponents;
     cout << "Enter the number of components: ";
     cin >> numComponents;
 
-    if (!ValidateInput()) 
+    if (!ValidateInput())
     {
         cout << "Invalid input! Please enter a valid number." << endl;
-        return;
+        return nullptr;
     }
 
-
-    int choice;
     double density, radius, width, height, depth, baseRadius;
 
     for (int i = 0; i < numComponents; ++i)
     {
-        cout << "Enter component type (1. Sphere, 2. Parallelepiped, 3. Cone, 4. Cylinder): ";
+        for (int i = 0; i < indentation; ++i)
+        {
+            cout << " ";
+        }
+        cout << "Enter component type (1. Sphere, 2. Parallelepiped, 3. Cone, 4. Cylinder,  5. Compound): ";
+        int choice;
         cin >> choice;
 
         if (!ValidateInput()) {
@@ -115,6 +119,10 @@ void addCompoundBody(vector<BodyPtr>& bodies)
             continue;
         }
 
+        for (int i = 0; i < indentation; ++i)
+        {
+            cout << " ";
+        }
 
         switch (choice)
         {
@@ -132,7 +140,7 @@ void addCompoundBody(vector<BodyPtr>& bodies)
         case 2:
             cout << "Enter density, width, height, and depth: ";
             cin >> density >> width >> height >> depth;
-            if (!ValidateInput()) 
+            if (!ValidateInput())
             {
                 cout << "Invalid input! Please enter valid numbers." << endl;
                 --i;
@@ -146,7 +154,7 @@ void addCompoundBody(vector<BodyPtr>& bodies)
             if (!ValidateInput())
             {
                 cout << "Invalid input! Please enter valid numbers." << endl;
-                --i; 
+                --i;
                 continue;
             }
             compound->AddChildBody(make_shared<CCone>(density, baseRadius, height));
@@ -154,7 +162,7 @@ void addCompoundBody(vector<BodyPtr>& bodies)
         case 4:
             cout << "Enter density, base radius, and height: ";
             cin >> density >> baseRadius >> height;
-            if (!ValidateInput()) 
+            if (!ValidateInput())
             {
                 cout << "Invalid input! Please enter valid numbers." << endl;
                 --i;
@@ -162,16 +170,28 @@ void addCompoundBody(vector<BodyPtr>& bodies)
             }
             compound->AddChildBody(make_shared<CCylinder>(density, baseRadius, height));
             break;
+        case 5:
+            compound->AddChildBody(AddCompoundBodyRecursive(indentation + 4));
+            break;
         default:
             cout << "Invalid component type! Please try again.\n";
             --i;
             break;
         }
     }
-
-    bodies.push_back(compound);
-    cout << "Compound body added successfully!\n";
+    return compound;
 }
+
+void AddCompoundBody(vector<BodyPtr>& bodies)
+{
+    auto finalcompound = AddCompoundBodyRecursive();
+    if (finalcompound)
+    {
+        bodies.push_back(finalcompound);
+        cout << "Compound body added successfully!\n";
+    }
+}
+
 
 int main() 
 {
@@ -226,7 +246,7 @@ int main()
             CreateCylinder(bodies, density, baseRadius, height);
             break;
         case 5:
-            addCompoundBody(bodies);
+            AddCompoundBody(bodies);
             break;
         case 6:
         {

@@ -14,6 +14,7 @@ public:
 
 private:
     vector<BodyPtr> m_bodies;
+    string ToStringRecursive(int indentation) const;
 
     bool Contains(const BodyPtr& body) const;
 };
